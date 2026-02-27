@@ -11,21 +11,16 @@ on:
 jobs:
   setup-bun:
     runs-on: ubuntu-latest
-    outputs:
-      bun-path: ${{ steps.set-path.outputs.bun-path }}
     steps:
       - uses: actions/checkout@v4
 
-      # Install Bun
+      # Install Bun globally
       - name: Install Bun
-        id: set-path
         run: |
           curl -fsSL https://bun.sh/install | bash
-          echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
-          echo "bun-path=$HOME/.bun/bin" >> $GITHUB_OUTPUT
 
-      # Install dependencies once
+      # Install dependencies
       - run: bun install
 
   build-and-test:
@@ -33,9 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # Restore Bun path
-      - run: echo "PATH=${{ needs.setup-bun.outputs.bun-path }}:$PATH" >> $GITHUB_ENV
 
       # Run tests
       - run: bun test
@@ -48,9 +40,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # Restore Bun path
-      - run: echo "PATH=${{ needs.setup-bun.outputs.bun-path }}:$PATH" >> $GITHUB_ENV
 
       # Deploy to Vercel
       - name: Deploy to Vercel
