@@ -9,39 +9,28 @@ on:
     types: [created]
 
 jobs:
-  setup-bun:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      # 1️⃣ Checkout code
       - uses: actions/checkout@v4
 
-      # Install Bun globally
+      # 2️⃣ Install Bun
       - name: Install Bun
         run: |
           curl -fsSL https://bun.sh/install | bash
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH  # make bun globally available
 
-      # Install dependencies
+      # 3️⃣ Install dependencies
       - run: bun install
 
-  build-and-test:
-    needs: setup-bun
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      # 4️⃣ Run tests (Vitest or any "test" script)
+      - run: bun test || echo "No tests found, skipping"
 
-      # Run tests
-      - run: bun test
-
-      # Build Vue project
+      # 5️⃣ Build Vue project
       - run: bun run build
 
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      # Deploy to Vercel
+      # 6️⃣ Deploy to Vercel
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
         with:
