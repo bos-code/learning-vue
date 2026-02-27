@@ -315,9 +315,7 @@ export const tasks = [
     completed: true,
     progress: 100
   },
-  {
-    id: "tsk_025",
-    title: "Prepare  },
+  
   {
     id: "tsk_026",
     title: "Create empty state illustrations",
