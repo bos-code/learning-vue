@@ -1,4 +1,4 @@
-name: Vue + Bun CI/CD Optimized
+name: Vue + Bun CI/CD
 
 on:
   push:
@@ -36,13 +36,6 @@ jobs:
 
       # Restore Bun path
       - run: echo "PATH=${{ needs.setup-bun.outputs.bun-path }}:$PATH" >> $GITHUB_ENV
-
-      # Sourcery code review
-      - name: Run Sourcery AI Review
-        uses: sourcery-ai/sourcery-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          directory: ./src
 
       # Run tests
       - run: bun test
